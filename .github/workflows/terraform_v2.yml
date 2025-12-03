@@ -37,11 +37,23 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/LabRole
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
 
       - name: Terraform Init
         run: terraform init
+
+      - name: Terraform Import DB Subnet Group
+        run: terraform import module.rds.aws_db_subnet_group.this rds-subnet-group || echo "Already imported"
+        working-directory: envs/dev
+        continue-on-error: true
+
+      - name: Terraform Import Security Group
+        run: terraform import module.rds.aws_security_group.this sg-0c96a913a76ab1367 || echo "Already imported"
+        working-directory: envs/dev
+        continue-on-error: true
 
       - name: Terraform Format
         run: terraform fmt -check
