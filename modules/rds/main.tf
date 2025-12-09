@@ -31,7 +31,7 @@ resource "aws_security_group" "this" {
 
 # Instância RDS PostgreSQL
 resource "aws_db_instance" "this" {
-  identifier              = "fiap-soat-db"
+  identifier              = "fiap-soat-db-clientes"
   engine                  = "postgres"
   engine_version          = var.db_engine_version
   instance_class          = var.db_instance_class
@@ -51,6 +51,6 @@ resource "aws_db_instance" "this" {
   monitoring_interval     = 0 # Desativa Enhanced Monitoring no AWS Academy Lab
 
   tags = {
-    Name = "fiap-soat-db"
+    Name = "fiap-soat-db-clientes"
   }
 }
